@@ -1,0 +1,16 @@
+name: Mirror
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+jobs:
+  rpms_kernel:
+    name: rpms/kernel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone rpms/kernel
+        run: git clone --bare https://src.fedoraproject.org/rpms/kernel.git .
+      - name: Mirror rpms/kernel
+        run: git push --mirror "https://token:$MIRRORING_TOKEN@github.com/ClangBuiltLinux/rpms_kernel.git"
+        env:
+          MIRRORING_TOKEN: ${{ secrets.MIRRORING_TOKEN }}
